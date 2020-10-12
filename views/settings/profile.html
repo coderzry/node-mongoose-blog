@@ -1,0 +1,119 @@
+{{extend '../_layouts/home.html'}}
+
+{{block 'title'}}{{'多人博客 - 首页'}}{{/block}}
+
+{{block 'body'}}
+<section class="container">
+  {{include '../_partials/settings-nav.html'}}
+  <div class="col-md-5">
+    <form id="profile_form" method="post">
+      <div class="form-group">
+        <label for="">账号</label>
+        <input type="email" name="email" value="{{ user.email }}" readonly style="border: none;">
+      </div>
+      <div class="form-group">
+        <label for="">昵称</label>
+        <input type="text" class="form-control" id="" name="nickname" placeholder="" value="{{ user.nickname }}">
+      </div>
+      <div class="form-group">
+        <label for="">介绍</label>
+        <textarea class="form-control" rows="3" placeholder="说点什么吧" name="bio">{{ user.bio }}</textarea>
+      </div>
+      <div class="form-group">
+        <label for="">性别</label>
+        <div>
+          <input type="hidden" name="" id="hgender" value="{{user.gender}}">
+          <label class="radio-inline">
+            <input type="radio" name="gender" id="" value="男"> 男
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="gender" id="" value="女"> 女
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="gender" id="" value="保密"> 保密
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="">生日</label>
+        <input type="text" class="form-control" id="bir" name="birthday" placeholder="" value="{{user.birthday}}">
+      </div>
+
+      <button type="submit" class="btn btn-success">保存</button>
+    </form>
+  </div>
+  <div class="col-md-2 profile-avatar">
+    <form enctype="multipart/form-data" method="post" name="fileInfo" id="upavatar">
+      <dl>
+        <dt style="text-align: center;">点击图片更改头像</dt>
+        <dd>
+          <img class="avatar" width="150" height="150" src="{{user.avatar}}" alt="" id="preview">
+          <input type="file" accept="/png,/jpg" id="picUpload" name="file" style="display: none;">
+          <div>
+            <button class="btn btn-default" id="upfile_btn">Upload new picture</button>
+          </div>
+        </dd>
+      </dl>
+    </form>
+  </div>
+</section>
+{{/block}}
+
+{{block 'script'}}
+<script src="/public/js/laydate/laydate.js"></script>
+<script>
+  laydate.render({
+    elem: '#bir'
+  })
+
+  var hg = $('#hgender').val()
+  $("input[name=gender]").each(function () {
+    var str = $(this).val();
+    if (str == hg) {
+      $(this).attr('checked', true)
+    }
+  })
+
+
+
+  //profile信息
+  $('#profile_form').on('submit', function (e) {
+    e.preventDefault()
+    let formData = $(this).serialize()
+    // console.log(formData)
+    $.ajax({
+      type: 'POST',
+      url: '/settings/profile',
+      dataType: 'json',
+      data: formData,
+      success: function (data) {
+        var err_code = data.err_code
+        if (err_code === 0) {
+          // window.alert('修改成功')
+          window.location.href = '/'
+        } else {
+          window.alert('修改失败，稍后再试')
+        }
+      }
+    })
+  })
+
+
+
+  $('#preview').on('click',function(e){
+    $('#picUpload').click()
+  })
+  $('#preview').hover(function(){
+    $(this).css("opacity", "0.5").append("更换头像")
+  },function(){
+    $(this).css('opacity','1')
+  })
+
+
+
+
+
+
+
+</script>
+{{/block}}

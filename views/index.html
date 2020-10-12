@@ -1,0 +1,126 @@
+{{extend './_layouts/home.html'}}
+
+{{block 'title'}}{{'Mblog - 首页'}}{{/block}}
+{{block 'head'}}
+<style>
+  p {
+
+    width: 400px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .media-title {
+
+    width: 700px;
+    height: 20px;
+    position: relative;
+  }
+
+  .media-title h4 {
+    position: absolute;
+    left: 0;
+  }
+
+  .media-title span {
+    position: absolute;
+    right: 0;
+  }
+
+  .media-content {
+    position: relative;
+    width: 700px;
+    height: 22px;
+
+  }
+
+  .media-content p {
+    position: absolute;
+    left: 0;
+  }
+
+  .media-content span {
+    position: absolute;
+    left: 65%;
+  }
+
+  .media-content time {
+    display: block;
+    /* margin-left: 500px; */
+    position: absolute;
+    right: 0;
+  }
+</style>
+
+
+{{/block}}
+
+{{block 'body'}}
+<section class="container">
+  <ul class="media-list">
+    {{ each topics topic index}}
+    <li class="media">
+      <div class="media-left">
+        <a href="#">
+          <img width="40" height="40" class="media-object" src="../public/img/avatar-default.png" alt="...">
+        </a>
+      </div>
+      <div class="media-body">
+        <input type="text" value="{{ topic.id }}" id="topic_id" style="display: none;">
+        <div class="media-title">
+          <!-- <h4 class="media-heading"><a href="javascript:void(0)" id="detail">{{ topic.title }}</a></h4> -->
+          <a href="/topic/show?id={{topic.id}}&p_id={{topic.publisher_id}}" id="detail">{{ topic.title }}</a>
+          <span>{{topic.publisher}}</span>
+        </div>
+        <div class="media-content">
+          <p>{{topic.content}}</p><span>浏览{{topic.readNum}}</span><time>{{topic.createtime}}</time>
+        </div>
+      </div>
+    </li>
+    {{ /each }}
+  </ul>
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li>
+        <a href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="active"><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li>
+        <a href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</section>
+{{/block}}
+
+
+{{block 'script'}}
+<script>
+  // $("#detail").click(function () {
+  //   $.ajax({
+  //     url: "/topic/show", //请求后台
+  //     dataType: "json",
+  //     type: "post",
+  //     async: true,
+  //     data: "id=" + $("#topic_id").val(),
+  //     success: function (data) {
+  //       var err_code = data.err_code
+  //       console.log(err_code)
+  //       if (err_code === 0) {
+  //         window.location.href = '/topic/show.html'
+  //       }
+  //     }
+  //   });
+  // })
+</script>
+
+{{/block}}
